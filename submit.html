@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: rgb(245, 92, 92);">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Data to Firebase Databases</title>
+    <style>
+        .container{
+            max-width: 520px;
+            margin: auto;
+            margin-top: 100px;
+            font-family: sans-serif;
+        }
+        h1{
+            margin-bottom: 30px;
+        }
+        input,
+        textarea{
+            width: calc(100% - 20px);
+            display: block;
+            padding: 6px;
+            font-size: 20px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        textarea{
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <button>
+            <a href="welc.html">LOGOUT</a>
+        </button>
+        <nav>
+            <button>
+                <a href="index.html">DATABASE</a>
+            </button>
+        </nav>
+    </nav>
+    <div class="container">
+        <h1>ADD NEW EMPLOYEES</h1>
+        <div class="form">
+            <label>Name</label>
+            <input type="text">
+            <label>salaire</label>
+            <input type="text">
+            <label>date_de_debut_engagement</label>
+            <input type="text">
+            <label>date_de_fin_engagement</label>
+            <input type="text">
+            <label>post_ref</label>
+            <textarea></textarea>
+            <button>Submit</button>
+        </div>
+    </div>
+<!-- add firebase CDN -->
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        databaseURL:"https://table-sep-default-rtdb.firebaseio.com"
+    }
+    firebase.initializeApp(firebaseConfig)
+    // here connection is created with database
+    const database = firebase.database()
+
+    // run function on click submit btn
+    const submit = document.querySelector('button')
+    submit.onclick = () => sendData()
+
+    // create a function to send data
+    function sendData(){
+        var Name = document.querySelectorAll('input')[0]
+        var salaire = document.querySelectorAll('input')[1]
+        var date_de_debut_engagement = document.querySelectorAll('input')[2]
+        var date_de_fin_engagement= document.querySelectorAll('input')[3]
+        var post_ref = document.querySelector('textarea')
+
+        // set path where data will store
+        var listRef = database.ref('messages/')
+        // but we need firebase generated unique id's to show list data so
+        // push() will generate unique id
+        var newRef = listRef.push()
+        // now set data in db on given path
+        newRef.set({
+            // now send our data
+            'Name': Name.value,
+            'salaire': salaire.value,
+            'date_de_debut_engagement': date_de_debut_engagement.value,
+            'date_de_fin_engagement': date_de_fin_engagement.value,
+            'post_ref': post_ref.value
+        })
+    }
+</script>
+</body>
+</html>
